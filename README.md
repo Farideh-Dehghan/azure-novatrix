@@ -2,7 +2,7 @@
 
 Microsoft Azure course – Novatrix AB  
 
-Student: Farideh Dehghan
+Student: Farideh Dehghannejad
 
 ## Week 34 – Uppgift 1: Compute och kom igång
 
@@ -196,4 +196,6 @@ Testet visar att webbformuläret, Flask-tjänsten, Managed Identity och Azure Bl
 ### Begränsning
 
 Webbplatsen använder för närvarande HTTP. HTTPS med ett giltigt TLS-certifikat bör konfigureras innan lösningen används i produktion.
+
+
 
