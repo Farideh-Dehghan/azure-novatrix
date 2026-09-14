@@ -141,3 +141,59 @@ Säkerheten bygger på flera lager:
 
 6. Backend och lagring kan senare placeras utan publik IP-adress.
 
+## Week 37 – Uppgift 4: Storage
+
+### Syfte
+
+Kundtjänstformuläret har kopplats till Azure Blob Storage så att kundärenden och valfria bilagor kan sparas på ett säkert sätt.
+
+### Lagringslösning
+
+- Storage account: `stnovatrixfarideh37`
+
+- Region: `Sweden Central`
+
+- Prestanda: `Standard`
+
+- Redundans: `LRS`
+
+- Åtkomstnivå: `Hot`
+
+- Privat container: `novatrix-arenden`
+
+Standard valdes eftersom detta är en mindre demonstrationslösning med låg trafik. LRS ger låg kostnad och är tillräckligt för skoluppgiften. Hot valdes eftersom testinformationen ska kunna nås direkt.
+
+### Integration med webbplatsen
+
+Webbservern använder Nginx och en Python/Flask-tjänst. Formuläret skickar namn, e-post, meddelande och en valfri bilaga till servern.
+
+- Ärenden lagras som JSON-filer i mappen `arenden/`.
+
+- Bilagor lagras i mappen `bilagor/`.
+
+- Maximal filstorlek är 5 MB.
+
+### Säker åtkomst
+
+Containern tillåter ingen anonym åtkomst. Den användartilldelade hanterade identiteten `id-novatrix-app` är kopplad till den virtuella datorn `vm-novatrix-web`.
+
+Identiteten har rollen `Storage Blob Data Contributor` endast på containern `novatrix-arenden`. Detta följer principen om minsta möjliga behörighet. Inga lagringsnycklar, lösenord eller SAS-token sparas i koden.
+
+### Verifiering
+
+Ett testärende skickades via webbplatsen `http://57.174.208.71`.
+
+Ärendenummer: `20260914-095213-f80789fd`
+
+Följande blobbar skapades:
+
+- `arenden/20260914-095213-f80789fd.json`
+
+- `bilagor/20260914-095213-f80789fd-users.csv.csv`
+
+Testet visar att webbformuläret, Flask-tjänsten, Managed Identity och Azure Blob Storage fungerar tillsammans.
+
+### Begränsning
+
+Webbplatsen använder för närvarande HTTP. HTTPS med ett giltigt TLS-certifikat bör konfigureras innan lösningen används i produktion.
+
