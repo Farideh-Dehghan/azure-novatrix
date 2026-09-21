@@ -1,0 +1,348 @@
+{
+
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+
+  "contentVersion": "1.0.0.0",
+
+  "parameters": {
+
+    "location": {
+
+      "type": "string",
+
+      "defaultValue": "swedencentral",
+
+      "metadata": {
+
+        "description": "Azure region for the Novatrix resources."
+
+      }
+
+    },
+
+    "storageAccountName": {
+
+      "type": "string",
+
+      "defaultValue": "stnovatrixfarideh38",
+
+      "minLength": 3,
+
+      "maxLength": 24
+
+    },
+
+    "containerName": {
+
+      "type": "string",
+
+      "defaultValue": "novatrix-arenden"
+
+    },
+
+    "managedIdentityName": {
+
+      "type": "string",
+
+      "defaultValue": "id-novatrix-iac"
+
+    },
+
+    "virtualNetworkName": {
+
+      "type": "string",
+
+      "defaultValue": "vnet-novatrix-iac"
+
+    },
+
+    "networkSecurityGroupName": {
+
+      "type": "string",
+
+      "defaultValue": "nsg-novatrix-web-iac"
+
+    }
+
+  },
+
+  "resources": [
+
+    {
+
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+
+      "apiVersion": "2023-01-31",
+
+      "name": "[parameters('managedIdentityName')]",
+
+      "location": "[parameters('location')]",
+
+      "tags": {
+
+        "project": "Novatrix",
+
+        "managedBy": "ARM",
+
+        "week": "38"
+
+      }
+
+    },
+
+    {
+
+      "type": "Microsoft.Network/networkSecurityGroups",
+
+      "apiVersion": "2023-09-01",
+
+      "name": "[parameters('networkSecurityGroupName')]",
+
+      "location": "[parameters('location')]",
+
+      "properties": {
+
+        "securityRules": [
+
+          {
+
+            "name": "Allow-HTTP",
+
+            "properties": {
+
+              "priority": 100,
+
+              "direction": "Inbound",
+
+              "access": "Allow",
+
+              "protocol": "Tcp",
+
+              "sourcePortRange": "*",
+
+              "destinationPortRange": "80",
+
+              "sourceAddressPrefix": "Internet",
+
+              "destinationAddressPrefix": "*"
+
+            }
+
+          },
+
+          {
+
+            "name": "Allow-HTTPS",
+
+            "properties": {
+
+              "priority": 110,
+
+              "direction": "Inbound",
+
+              "access": "Allow",
+
+              "protocol": "Tcp",
+
+              "sourcePortRange": "*",
+
+              "destinationPortRange": "443",
+
+              "sourceAddressPrefix": "Internet",
+
+              "destinationAddressPrefix": "*"
+
+            }
+
+          }
+
+        ]
+
+      },
+
+      "tags": {
+
+        "project": "Novatrix",
+
+        "managedBy": "ARM",
+
+        "week": "38"
+
+      }
+
+    },
+
+    {
+
+      "type": "Microsoft.Network/virtualNetworks",
+
+      "apiVersion": "2023-09-01",
+
+      "name": "[parameters('virtualNetworkName')]",
+
+      "location": "[parameters('location')]",
+
+      "dependsOn": [
+
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+
+      ],
+
+      "properties": {
+
+        "addressSpace": {
+
+          "addressPrefixes": [
+
+            "10.38.0.0/16"
+
+          ]
+
+        },
+
+        "subnets": [
+
+          {
+
+            "name": "snet-web",
+
+            "properties": {
+
+              "addressPrefix": "10.38.1.0/24",
+
+              "networkSecurityGroup": {
+
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+
+              }
+
+            }
+
+          },
+
+          {
+
+            "name": "snet-private",
+
+            "properties": {
+
+              "addressPrefix": "10.38.2.0/24"
+
+            }
+
+          }
+
+        ]
+
+      },
+
+      "tags": {
+
+        "project": "Novatrix",
+
+        "managedBy": "ARM",
+
+        "week": "38"
+
+      }
+
+    },
+
+    {
+
+      "type": "Microsoft.Storage/storageAccounts",
+
+      "apiVersion": "2023-05-01",
+
+      "name": "[parameters('storageAccountName')]",
+
+      "location": "[parameters('location')]",
+
+      "sku": {
+
+        "name": "Standard_LRS"
+
+      },
+
+      "kind": "StorageV2",
+
+      "properties": {
+
+        "accessTier": "Hot",
+
+        "allowBlobPublicAccess": false,
+
+        "minimumTlsVersion": "TLS1_2",
+
+        "supportsHttpsTrafficOnly": true
+
+      },
+
+      "tags": {
+
+        "project": "Novatrix",
+
+        "managedBy": "ARM",
+
+        "week": "38"
+
+      }
+
+    },
+
+    {
+
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+
+      "apiVersion": "2023-05-01",
+
+      "name": "[format('{0}/default/{1}', parameters('storageAccountName'), parameters('containerName'))]",
+
+      "dependsOn": [
+
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+
+      ],
+
+      "properties": {
+
+        "publicAccess": "None"
+
+      }
+
+    }
+
+  ],
+
+  "outputs": {
+
+    "storageAccountName": {
+
+      "type": "string",
+
+      "value": "[parameters('storageAccountName')]"
+
+    },
+
+    "containerName": {
+
+      "type": "string",
+
+      "value": "[parameters('containerName')]"
+
+    },
+
+    "managedIdentityResourceId": {
+
+      "type": "string",
+
+      "value": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]"
+
+    },
+
+    "virtualNetworkName": {
+
+      "type": "string",
+
+      "value": "[parameters('virtualNetworkName')]"
+
