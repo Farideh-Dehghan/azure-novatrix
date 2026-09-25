@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from email.utils import format_datetime
 
 import json
-
+import os
 import uuid
 
 from urllib.parse import quote
@@ -21,7 +21,7 @@ app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 STORAGE_ACCOUNT = "stnovatrixfarideh37"
 
 CONTAINER = "novatrix-arenden"
-
+POWER_AUTOMATE_URL = os.getenv("POWER_AUTOMATE_URL", "")
 MI_RESOURCE_ID = (
 
     "/subscriptions/5d5e0f20-c148-42c8-9596-6a4764ddcefb/"
@@ -153,6 +153,28 @@ def submit():
         "application/json; charset=utf-8",
 
     )
+if POWER_AUTOMATE_URL:
+
+        flow_response = requests.post(
+
+            POWER_AUTOMATE_URL,
+
+            json={
+
+                "name": name,
+
+                "email": email,
+
+                "message": message,
+
+            },
+
+            timeout=15,
+
+        )
+
+        flow_response.raise_for_status()
+
 
     attachment = request.files.get("attachment")
 
