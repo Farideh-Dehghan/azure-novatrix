@@ -3,7 +3,9 @@ import azure.functions as func
 import html
 
 import uuid
-
+import os
+import json
+import urllib.request
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.route(route="arende", methods=["GET", "POST"])
@@ -19,6 +21,56 @@ def arende(req: func.HttpRequest) -> func.HttpResponse:
         meddelande = html.escape(req.form.get("meddelande", ""))
 
         arendenummer = str(uuid.uuid4())[:8].upper()
+ power_automate_url = os.environ.get("POWER_AUTOMATE_URL")
+
+        if not power_automate_url:
+
+            return func.HttpResponse(
+
+                "POWER_AUTOMATE_URL saknas.",
+
+                status_code=500
+
+            )
+
+        payload = {
+
+            "name": namn,
+
+            "email": epost,
+
+            "message": meddelande
+
+        }
+
+        request_data = json.dumps(payload).encode("utf-8")
+
+        power_request = urllib.request.Request(
+
+            power_automate_url,
+
+            data=request_data,
+
+            headers={"Content-Type": "application/json"},
+
+            method="POST"
+
+        )
+
+        try:
+
+            urllib.request.urlopen(power_request, timeout=20)
+
+        except Exception:
+
+            return func.HttpResponse(
+
+                "Ärendet kunde inte skickas till Power Automate.",
+
+                status_code=502
+            )
+
+                
 
         svar = f"""
 
