@@ -20,8 +20,8 @@ def arende(req: func.HttpRequest) -> func.HttpResponse:
 
         meddelande = html.escape(req.form.get("meddelande", ""))
 
-        arendenummer = str(uuid.uuid4())[:8].upper()
- power_automate_url = os.environ.get("POWER_AUTOMATE_URL")
+        arendenummer = str(uuid.uuid4())[:8].upper() 
+        power_automate_url = os.environ.get("POWER_AUTOMATE_URL")
 
         if not power_automate_url:
 
