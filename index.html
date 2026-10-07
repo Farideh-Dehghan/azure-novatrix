@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Novatrix Kundtjänst</title>
+  <title>Nordvik</title>
   <style>
     * {
       box-sizing: border-box;
@@ -71,14 +71,14 @@
 </head>
 <body>
   <header>
-    <h1>Novatrix AB</h1>
+    <h1>Nordvik</h1>
     <p>Välkommen till vår kundtjänst</p>
   </header>
 
   <main>
     <h2>Skicka ett ärende</h2>
 
-    <form>
+    <form action="/submit" method="post" enctype="multipart/form-data">
       <label for="name">Namn</label>
       <input type="text" id="name" name="name">
 
@@ -87,6 +87,8 @@
 
       <label for="message">Meddelande</label>
       <textarea id="message" name="message"></textarea>
+      <label for="attachment">Bifoga fil (valfritt)</label>
+<input type="file" id="attachment" name="attachment">
 
       <button type="submit">Skicka ärende</button>
     </form>
