@@ -6,7 +6,7 @@
       "type": "string",
       "defaultValue": "swedencentral",
       "metadata": {
-        "description": "Azure region for the Novatrix resources."
+        "description": "Azure region for the Nordvik resources."
       }
     },
     "containerName": {
@@ -77,7 +77,7 @@
         ]
       },
       "tags": {
-        "project": "Novatrix",
+        "project": "Nordvik",
         "managedBy": "ARM",
         "week": "38"
       }
@@ -109,7 +109,7 @@
         ]
       },
       "tags": {
-        "project": "Novatrix",
+        "project": "Nordvik",
         "managedBy": "ARM",
         "week": "38"
       }
@@ -129,7 +129,7 @@
         "allowBlobPublicAccess": false
       },
       "tags": {
-        "project": "Novatrix",
+        "project": "Nordvik",
         "managedBy": "ARM",
         "week": "38"
       }
