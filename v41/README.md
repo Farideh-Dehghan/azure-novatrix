@@ -2,7 +2,7 @@
 
 **Student:** Farideh Dehghannejad  
 
-**Företag:** Novatrix AB
+**Organisation:** Nordvik
 
 ## Syfte
 
