@@ -20,7 +20,7 @@ Jag valde Power Automate eftersom lösningen redan använder Microsoft 365. Powe
 
 3. Ett e-postmeddelande skickas till fältet **Ansvarig Email**. Meddelandet innehåller rubrik, beskrivning och prioritet.
 
-4. Ett meddelande publiceras i Teams-kanalen **Skötsel** i teamet **Dunderhem Förvaltning**.
+4. Ett meddelande publiceras i Teams-kanalen **Skötsel** i teamet **Nordvik**.
 
 ## Test
 
