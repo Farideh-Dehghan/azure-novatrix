@@ -48,19 +48,7 @@
       "location": "[parameters('location')]",
       "properties": {
         "securityRules": [
-          {
-            "name": "Allow-HTTP",
-            "properties": {
-              "priority": 100,
-              "direction": "Inbound",
-              "access": "Allow",
-              "protocol": "Tcp",
-              "sourcePortRange": "*",
-              "destinationPortRange": "80",
-              "sourceAddressPrefix": "Internet",
-              "destinationAddressPrefix": "*"
-            }
-          },
+         
           {
             "name": "Allow-HTTPS",
             "properties": {
